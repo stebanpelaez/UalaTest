@@ -15,4 +15,3 @@ class PreferencesManager: ObservableObject {
     var downloadedData: Bool = false
     
 }
-

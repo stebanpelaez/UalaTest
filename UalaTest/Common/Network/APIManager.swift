@@ -7,13 +7,13 @@
 import Foundation
 import Combine
 
-protocol APIServiceProtocol: AnyObject {
+protocol APIManagerProtocol: AnyObject {
     func fetchData<T: Decodable>(request: APIRequest, type: T.Type) -> Future<T, Error>
 }
 
-class APIService: APIServiceProtocol  {
+class APIManager: APIManagerProtocol  {
     
-    static let shared = APIService()
+    static let shared = APIManager()
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -41,11 +41,7 @@ class APIService: APIServiceProtocol  {
                     urlRequest = URLRequest(url: urlGet)
                 }
             } else {
-                do {
-                    try self.setBodyToRequest(urlRequest: &urlRequest, headers: request.headers, body: request.params)
-                } catch {
-                    return promise(.failure(APIError.errorBody))
-                }
+                try? self.setBodyToRequest(urlRequest: &urlRequest, headers: request.headers, body: request.params)
             }
             
             urlRequest.httpMethod = request.method.rawValue
@@ -109,13 +105,7 @@ class APIService: APIServiceProtocol  {
     }
     
     internal func setBodyToRequest(urlRequest: inout URLRequest, headers: [String: String], body: [AnyHashable: Any]) throws {
-        if let contentType = headers[HTTPHeader.contentType], contentType == HTTPHeader.urlEncoded, let newBody = body as? [String: String] {
-            var urlComponents = URLComponents()
-            urlComponents.queryItems = newBody.map { URLQueryItem(name: $0.key, value: $0.value) }
-            urlRequest.httpBody = urlComponents.query?.data(using: .utf8)
-        } else {
-            urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
-        }
+        urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
     }
     
 }
