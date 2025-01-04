@@ -12,7 +12,7 @@ struct ContentView: View {
     @StateObject var preferencesManager = PreferencesManager.shared
     
     var body: some View {
-        ZStack {
+        Group {
             if self.preferencesManager.downloadedData {
                 CitiesView()
             } else {

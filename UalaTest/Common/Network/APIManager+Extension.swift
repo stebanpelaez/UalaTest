@@ -1,5 +1,5 @@
 //
-//  APIService+Extension.swift
+//  APIManager+Extension.swift
 //  UalaTest
 //
 //  Created by Juan Esteban Pelaez on 31/12/24.
@@ -10,7 +10,6 @@ enum APIError: Swift.Error {
     case invalidURL
     case httpCode(Int)
     case unexpectedResponse
-    case errorBody
     case unknown
 }
 
@@ -20,7 +19,6 @@ extension APIError: LocalizedError {
         case .invalidURL: return "Invalid URL"
         case let .httpCode(code): return "Unexpected HTTP code: \(code)"
         case .unexpectedResponse: return "Unexpected response from the server"
-        case .errorBody: return "Error in body"
         case .unknown: return "Unknown"
         }
     }
@@ -39,7 +37,6 @@ enum HTTPHeader {
     static let accept = "Accept"
     
     static let applicationJson = "application/json;charset=UTF-8"
-    static let urlEncoded = "application/x-www-form-urlencoded"
 }
 
 enum Constants: String {

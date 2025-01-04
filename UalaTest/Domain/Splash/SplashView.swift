@@ -6,14 +6,23 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SplashView: View {
     
+    private var viewModel = SplashViewModel(dataManager: DataManager.shared)
+    
     var body: some View {
-        ProgressView()
-            .progressViewStyle(CircularProgressViewStyle(tint: .blue))
-            .scaleEffect(2.0, anchor: .center)
-        
+        VStack(spacing: 30) {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                .scaleEffect(2.0, anchor: .center)
+            Text("Downloading cities...")
+                .font(.title)
+        }
+        .task {
+            self.viewModel.downloadData()
+        }
     }
     
 }
