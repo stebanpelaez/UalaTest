@@ -9,13 +9,36 @@ import MapKit
 
 struct DetailView: View {
     
+    @Environment(CitiesViewModel.self) private var viewModel
+    
+    internal let inspection = Inspection<Self>()
+    
     var body: some View {
-        Text("Detail")
+        if let item = self.viewModel.selectedItem {
+            let name = "\(item.name), \(item.country)"
+            let coordinate = CLLocationCoordinate2D(latitude: item.lat, longitude: item.lon)
+            let rect = MKMapRect(origin: MKMapPoint(coordinate),
+                                 size: MKMapSize(width: 1, height: 1))
+            
+            Map(bounds: MapCameraBounds(centerCoordinateBounds: rect,
+                                        minimumDistance: 10000,
+                                        maximumDistance: 20000)) {
+                Marker(item.name, coordinate: coordinate)
+            }
+            .accessibilityIdentifier("mapDetail")
+            .navigationTitle(name)
+            .onReceive(inspection.notice) { self.inspection.visit(self, $0) }
+        }
     }
     
 }
 
 
 #Preview {
-    DetailView()
+    
+    let viewModel = CitiesViewModel(dataManager: MockDataManager.shared)
+    viewModel.selectedItem = MockHelper.mock
+    
+    return DetailView().environment(viewModel)
 }
+

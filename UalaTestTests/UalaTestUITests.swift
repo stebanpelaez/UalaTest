@@ -7,10 +7,23 @@
 
 import XCTest
 import ViewInspector
+import SwiftUI
 
 @testable import UalaTest
 
+extension Inspection: InspectionEmissary { }
+
 final class UalaTestUITests: XCTestCase {
+    
+    func testSplashView() throws {
+        
+        PreferencesManager.shared.downloadedData = true
+        
+        let sut = SplashView(viewModel: SplashViewModel(apiManager: MockApiManager.shared, dataManager: MockDataManager.shared))
+        
+        let value = try sut.inspect().implicitAnyView().vStack().text(1).string()
+        XCTAssertEqual(value, "Downloading cities...")
+    }
     
     func testContentView() throws {
         
@@ -25,8 +38,60 @@ final class UalaTestUITests: XCTestCase {
         PreferencesManager.shared.downloadedData = true
         
         let citiesView = try sut.inspect().find(CitiesView.self).actualView()
-        let value = try citiesView.inspect().implicitAnyView().text().string()
-        XCTAssertEqual(value, "CitiesView")
+        let value = citiesView.isPortrait
+        XCTAssertEqual(value, true)
+    }
+    
+    func testLandCitiesView() throws {
+        let sut = LandCitiesView()
+        let value = try sut.inspect().implicitAnyView().hStack().accessibilityIdentifier()
+        XCTAssertEqual(value, "landscapeCities")
+    }
+    
+    func testSearchBar() throws {
+        let search = Binding<String>(wrappedValue: "Hola")
+    
+        let sut = SearchBar(placeHolder: "Placeholder", searchText: search)
+        try sut.inspect().implicitAnyView().hStack().image(2).callOnTapGesture()
+        
+        XCTAssertTrue(search.wrappedValue.isEmpty)
+    }
+    
+    @MainActor
+    func testCitiesListView() throws {
+        
+        let viewModel = CitiesViewModel(dataManager: MockDataManager.shared)
+        
+        let sut = CitiesListView()
+        _ = sut.environment(viewModel)
+        
+        let exp = sut.inspection.inspect { view in
+            let button = try view.implicitAnyView().vStack().hStack(0).button(1)
+            try button.tap()
+            XCTAssertEqual(try button.accessibilityIdentifier(), "favourites")
+        }
+        
+        ViewHosting.host(view: sut.environment(viewModel))
+        defer { ViewHosting.expel() }
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    @MainActor
+    func testDetailView() throws {
+        
+        let viewModel = CitiesViewModel(dataManager: MockDataManager.shared)
+        viewModel.selectedItem = MockHelper.mock
+        
+        let sut = DetailView()
+        
+        let exp = sut.inspection.inspect { view in
+            let value = try view.implicitAnyView().map().accessibilityIdentifier()
+            XCTAssertEqual(value, "mapDetail")
+        }
+                
+        ViewHosting.host(view: sut.environment(viewModel))
+        defer { ViewHosting.expel() }
+        wait(for: [exp], timeout: 1.0)
     }
     
 }

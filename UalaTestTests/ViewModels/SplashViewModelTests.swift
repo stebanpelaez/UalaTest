@@ -13,15 +13,19 @@ import Combine
 final class SplashViewModelTests: XCTestCase {
     
     func testDownloadData() {
+                
+        let apiManager = MockApiManager.shared
+        apiManager.mock = MockHelper.listLocation
         
-        PreferencesManager.shared.downloadedData = false
-
-        let viewModel = SplashViewModel(apiManager: MockApiService.shared, dataManager: MockDataManager.shared)
+        let viewModel = SplashViewModel(apiManager: apiManager, dataManager: MockDataManager.shared)
         
+        PreferencesManager.shared.downloadedData = true
         viewModel.downloadData()
         
-        XCTAssertTrue(PreferencesManager.shared.downloadedData)
+        PreferencesManager.shared.downloadedData = false
+        viewModel.downloadData()
+            
+        XCTAssertFalse(PreferencesManager.shared.downloadedData)
     }
-    
     
 }

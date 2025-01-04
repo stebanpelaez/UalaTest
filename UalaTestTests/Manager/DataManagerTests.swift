@@ -13,12 +13,12 @@ import SwiftData
 final class DataManagerTests: XCTestCase {
     
     @MainActor
-    func testFecthDataGet() {
+    func testDataManager() {
                 
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-        let modelContext = try! ModelContainer(for: DataItem.self, configurations: configuration)
+        let modelContainer = try! ModelContainer(for: DataItem.self, configurations: configuration)
 
-        let manager = DataManager(modelContext: modelContext.mainContext)
+        let manager = DataManager(modelContainer: modelContainer, modelContext: modelContainer.mainContext)
         
         manager.add(MockHelper.listLocation)
         
@@ -31,8 +31,8 @@ final class DataManagerTests: XCTestCase {
         
         item?.isBookmark.toggle()
                         
-        let favorites = manager.fetchFavourites().count
-        XCTAssertEqual(favorites, 1)
+        let favourites = manager.fetchFavourites().count
+        XCTAssertEqual(favourites, 1)
         
         manager.removeAll()
         

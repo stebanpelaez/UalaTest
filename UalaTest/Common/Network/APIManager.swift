@@ -1,5 +1,5 @@
 //
-//  APIService.swift
+//  APIManager.swift
 //  UalaTest
 //
 //  Created by Juan Esteban Pelaez on 31/12/24.
@@ -11,6 +11,7 @@ protocol APIManagerProtocol: AnyObject {
     func fetchData<T: Decodable>(request: APIRequest, type: T.Type) -> Future<T, Error>
 }
 
+/// Esta es una clase base que yo uso para realizar solicitudes de red, esta es un poco basica por motivos de la prueba, para proyectos mas complejos deberia ser mas robusta.
 class APIManager: APIManagerProtocol  {
     
     static let shared = APIManager()

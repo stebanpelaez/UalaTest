@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 
+/// Modelo de datos para almacenar en SwiftData
 @Model
 final class DataItem {
     

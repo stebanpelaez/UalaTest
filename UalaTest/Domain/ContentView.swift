@@ -9,15 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @StateObject var preferencesManager = PreferencesManager.shared
+    @ObservedObject private var preferencesManager = PreferencesManager.shared
     
+    /// Si ya descargo la data me muestra la lista de ciudades, si es primera vez o se borraron los datos se muestra el Splash para conectarse a la red y realizar la respectiva descarga
     var body: some View {
-        Group {
-            if self.preferencesManager.downloadedData {
-                CitiesView()
-            } else {
-                SplashView()
-            }
+        if self.preferencesManager.downloadedData {
+            CitiesView()
+        } else {
+            SplashView()
         }
     }
     
