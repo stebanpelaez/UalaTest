@@ -6,6 +6,7 @@
 //
 import Foundation
 
+/// Mocks para las #Previews y pruebas unitarias
 enum MockHelper {
     
     static let mock = DataItem(cityId: "", name: "Madrid", country: "ES", lat: 40.489349, lon: -3.68275, isBookmark: false)

@@ -6,6 +6,7 @@
 //
 import Foundation
 
+/// Object que se usa para deserializar la data de las ciudades
 struct LocationItem: Codable {
     let country, name: String
     let id: Int

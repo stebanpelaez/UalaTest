@@ -24,14 +24,14 @@ final class ApiManagerTests: XCTestCase {
         super.tearDown()
     }
     
-    func testFecthDataGet() {
+    func testFetchDataGet() {
         
         let expectation = expectation(description: "Consume get service from server")
         
         let urlSessionMock = MockURLSession()
         urlSessionMock.data = try? JSONSerialization.data(withJSONObject: ConstantsMock.responseLocations)
         
-        let apiService = APIManager(session: urlSessionMock)
+        let apiManager = APIManager(session: urlSessionMock)
         
         let request = APIRequestBuilder(urlApi: ConstantsMock.apiBase)
             .withEndPoint(ConstantsMock.endPointCities)
@@ -40,7 +40,7 @@ final class ApiManagerTests: XCTestCase {
             .withHeaders(["header1": "value1"])
             .build()
         
-        apiService.fetchData(request: request, type: [LocationItem].self)
+        apiManager.fetchData(request: request, type: [LocationItem].self)
             .sink {
                 if case .failure(let error) = $0 {
                     XCTFail("Expected success but got error: \(error)")
@@ -61,7 +61,7 @@ final class ApiManagerTests: XCTestCase {
         let urlSessionMock = MockURLSession()
         urlSessionMock.error = APIError.unexpectedResponse
         
-        let apiService = APIManager(session: urlSessionMock)
+        let apiManager = APIManager(session: urlSessionMock)
         
         let request = APIRequestBuilder(urlApi: ConstantsMock.apiBase)
             .withEndPoint(ConstantsMock.endPointCities)
@@ -71,7 +71,7 @@ final class ApiManagerTests: XCTestCase {
             .withHeaders(["header1": "value1"])
             .build()
         
-        apiService.fetchData(request: request, type: [LocationItem].self)
+        apiManager.fetchData(request: request, type: [LocationItem].self)
             .sink {
                 if case .failure(let error) = $0 {
                     XCTAssertNotNil(error)

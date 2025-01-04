@@ -23,6 +23,7 @@ struct APIRequest {
     var params: [AnyHashable: Any] = [:]
 }
 
+/// Este es un modelo basico para empaquetar realizar solicitudes de red customizables.
 class APIRequestBuilder {
 
     private var apiRequest: APIRequest

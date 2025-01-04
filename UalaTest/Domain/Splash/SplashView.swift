@@ -10,7 +10,11 @@ import SwiftData
 
 struct SplashView: View {
     
-    private var viewModel = SplashViewModel(dataManager: DataManager.shared)
+    private var viewModel: SplashViewModel
+    
+    init(viewModel: SplashViewModel? = nil) {
+        self.viewModel = viewModel ?? SplashViewModel(dataManager: DataManager.shared)
+    }
     
     var body: some View {
         VStack(spacing: 30) {
@@ -27,7 +31,9 @@ struct SplashView: View {
     
 }
 
-
 #Preview {
-    SplashView()
+    
+    let viewModel = SplashViewModel(apiManager: MockApiManager.shared, dataManager: MockDataManager.shared)
+    
+    return SplashView(viewModel: viewModel)
 }

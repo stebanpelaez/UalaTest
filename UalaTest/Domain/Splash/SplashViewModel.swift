@@ -24,7 +24,6 @@ class SplashViewModel {
     func downloadData() {
         
         if self.preferencesManager.downloadedData {
-            self.loadDataInStorage()
             return
         }
         
@@ -44,11 +43,16 @@ class SplashViewModel {
     }
     
     private func saveDataInStorage(locations: [LocationItem]) {
-        self.loadDataInStorage()
+        self.dataManager.add(locations)
+        Task {
+            await self.loadDataInStorage()
+        }
     }
     
-    private func loadDataInStorage()  {
-        self.preferencesManager.downloadedData = true
+    private func loadDataInStorage() async {
+        await MainActor.run {
+            self.preferencesManager.downloadedData = true
+        }
     }
     
 }

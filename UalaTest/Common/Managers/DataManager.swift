@@ -14,31 +14,37 @@ protocol DataManagerProtocol: AnyObject {
     func removeAll()
 }
 
+/// Este manager se usa para gestionar el acceso a `SwiftData`
 class DataManager: DataManagerProtocol {
     
-    private var queryCache: [String: [DataItem]] = [:]
+    private var queryCache: [String: [DataItem]] = [:] /// Se usa este diccionario para optimizar las busquedas y no acceder siempre a SwiftData
     
+    private let modelContainer: ModelContainer
     private let modelContext: ModelContext
     
     @MainActor
     static let shared = DataManager()
     
     @MainActor
-    init(memoryOnly: Bool = false) {
-        let modelContainer = try! ModelContainer(for: DataItem.self, configurations: ModelConfiguration(isStoredInMemoryOnly: memoryOnly))
-        self.modelContext = modelContainer.mainContext
+    private init() {
+        self.modelContainer = try! ModelContainer(for: DataItem.self, configurations: ModelConfiguration(isStoredInMemoryOnly: false))
+        self.modelContext = self.modelContainer.mainContext
     }
     
-    init(modelContext: ModelContext) {
+    init(modelContainer: ModelContainer, modelContext: ModelContext) {
+        self.modelContainer = modelContainer
         self.modelContext = modelContext
     }
     
+    /// Si el predicate es `nil` me trae todos los registros
+    /// Siempre me trae ordenado los datos por nombre y pais
     private func getFetchDescriptor(_ predicate: Predicate<DataItem>?) -> FetchDescriptor<DataItem> {
         var request = FetchDescriptor<DataItem>(predicate: predicate, sortBy: [
             SortDescriptor(\.name, order: .forward),
             SortDescriptor(\.country, order: .forward)
         ])
-        request.fetchLimit = 500
+        request.fetchLimit = 500 /// Se establece en máximo 500 registros para respuesta mas rápida y para no sobrecargar las vistas
+                                 /// Esto limita el total de los resultados, pero lo considero una buena practica al realizar busquedas en tiempo real
         return request
     }
     
@@ -51,29 +57,34 @@ class DataManager: DataManagerProtocol {
         }
     }
     
+    /// Buscar y devolver la lista de resultados, haciendo uso de `queryCache` para filtrar por busquedas recientes o accerder a swiftData
+    /// - Parameter query: Texto a buscar, ya viene en minuscula
+    /// - Returns: Lista de resultados desde cache o desde SwiftData
     func fetch(withSearch query: String) -> [DataItem] {
         
+        /// Primero se busca en cache para optimizar las busquedas recientes
         if let cachedResults = self.queryCache[query] {
-            print("Cache", query, cachedResults.count)
+            print("Cache query='\(query)' : \(cachedResults.count)")
             return cachedResults
         }
         
         var predicate: Predicate<DataItem>? = nil
         if !query.isEmpty {
             predicate = #Predicate<DataItem> { city in
-                city.cityId.contains(query)
+                city.cityId.contains(query)             /// Aca se realiza la validacion para filtrar los datos que coincidan
             }
         }
         
         let request = self.getFetchDescriptor(predicate)
         let newResults = self.runFetchRequest(request)
         
-        print("SwiftData", query, newResults.count)
-        self.queryCache[query] = newResults
+        print("SwiftData query='\(query)' : \(newResults.count)")
+        self.queryCache[query] = newResults             /// Se guarda en cache el resultado de la busqueda
         
         return newResults
     }
     
+    /// Me trae la lista de favoritos
     func fetchFavourites() -> [DataItem] {
         let predicate = #Predicate<DataItem> { city in
             city.isBookmark
@@ -82,6 +93,7 @@ class DataManager: DataManagerProtocol {
         return self.runFetchRequest(request)
     }
     
+    /// Esta funcion divide la informacion para almacenar en bloques de máximo 1000 registros para buenas practicas con SwiftData
     func add(_ items: [LocationItem]) {
         
         let batchSize = 1_000
@@ -99,10 +111,11 @@ class DataManager: DataManagerProtocol {
                 try self.modelContext.save()
             }
         } catch {
-            fatalError(error.localizedDescription)
+            print(error.localizedDescription)
         }
     }
     
+    /// Elimina todo lo relacionado con el modelo y limpia cache
     func removeAll() {
         do {
             self.queryCache.removeAll()
