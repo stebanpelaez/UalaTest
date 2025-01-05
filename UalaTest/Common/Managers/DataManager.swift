@@ -71,7 +71,7 @@ class DataManager: DataManagerProtocol {
         var predicate: Predicate<DataItem>? = nil
         if !query.isEmpty {
             predicate = #Predicate<DataItem> { city in
-                city.cityId.contains(query)             /// Aca se realiza la validacion para filtrar los datos que coincidan
+                city.prefix.contains(query)             /// Aca se realiza la validacion para filtrar los datos que coincidan
             }
         }
         
@@ -104,8 +104,9 @@ class DataManager: DataManagerProtocol {
                 let nextBlock = Swift.min(start + batchSize, totalItems)
                 for i in start..<nextBlock {
                     let location = items[i]
-                    let key = "\(location.name.lowercased()), \(location.country.lowercased())"
-                    let itemData = DataItem(cityId: key, name: location.name, country: location.country, lat: location.coord.lat, lon: location.coord.lon, isBookmark: false)
+                    /// Se usa este prefix para buscar en SwiftData ya se almacena en lowercased para una busqueda plana y que sea mas rapida
+                    let prefix = "\(location.name.lowercased()), \(location.country.lowercased())"
+                    let itemData = DataItem(prefix: prefix, name: location.name, country: location.country, lat: location.coord.lat, lon: location.coord.lon, isBookmark: false)
                     self.modelContext.insert(itemData)
                 }
                 try self.modelContext.save()
