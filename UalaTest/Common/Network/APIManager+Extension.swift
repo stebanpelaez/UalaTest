@@ -38,10 +38,3 @@ enum HTTPHeader {
     
     static let applicationJson = "application/json;charset=UTF-8"
 }
-
-enum Constants: String {
-    case urlBase = "https://gist.githubusercontent.com/hernan-uala"
-    case endPointCities = "dce8843a8edbe0b0018b32e137bc2b3a/raw/0996accf70cb0ca0e16f9a99e0ee185fafca7af1/cities.json"
-    
-    case downloadedData = "downloadedData"
-}

@@ -25,7 +25,7 @@ struct DetailView: View {
                                         maximumDistance: 20000)) {
                 Marker(item.name, coordinate: coordinate)
             }
-            .accessibilityIdentifier("mapDetail")
+            .accessibilityIdentifier(Constants.Identifiers.mapDetail)
             .navigationTitle(name)
             .onReceive(inspection.notice) { self.inspection.visit(self, $0) }
         }

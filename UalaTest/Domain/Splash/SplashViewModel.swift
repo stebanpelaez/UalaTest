@@ -27,8 +27,8 @@ class SplashViewModel {
             return
         }
         
-        let request = APIRequestBuilder(urlApi: Constants.urlBase.rawValue)
-            .withEndPoint(Constants.endPointCities.rawValue)
+        let request = APIRequestBuilder(urlApi: Constants.urlBase)
+            .withEndPoint(Constants.endPointCities)
             .withMethod(.get)
             .build()
         

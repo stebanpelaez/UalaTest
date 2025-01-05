@@ -84,10 +84,5 @@ final class ApiManagerTests: XCTestCase {
         
         wait(for: [expectation], timeout: 3.0)
     }
-    
-    func testContentView() {  // Note: `async`
-        let sut = ContentView()
-        XCTAssertNotNil(sut)
-    }
 
 }

@@ -16,10 +16,10 @@ struct SearchBar: View {
     var body: some View {
         let color = Color.black.opacity(0.8)
         HStack {
-            Image(systemName: "magnifyingglass")
+            Image(systemName: Constants.Images.magnifying)
             TextField(placeHolder, text: $searchText)
             if !self.searchText.isEmpty {
-                Image(systemName: "xmark.circle.fill")
+                Image(systemName:  Constants.Images.xmark)
                     .imageScale(.medium)
                     .foregroundColor(Color(.systemGray2))
                     .padding(3)

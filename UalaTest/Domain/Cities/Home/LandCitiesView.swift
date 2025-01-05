@@ -15,7 +15,7 @@ struct LandCitiesView: View {
             DetailView()
                 .frame(maxWidth: .infinity)
         }
-        .accessibilityIdentifier("landscapeCities")
+        .accessibilityIdentifier(Constants.Identifiers.landscapeCities)
     }
     
 }

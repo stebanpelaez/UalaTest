@@ -12,7 +12,7 @@ class PreferencesManager: ObservableObject {
     static let shared = PreferencesManager()
     
     /// Se usa esta variable para mostrar la vista de carga `SplasView` o la vista de la lista de ciudades en el `ContentView`, esta propiedad se guarda en los Defaults
-    @AppStorage(Constants.downloadedData.rawValue)
+    @AppStorage(Constants.downloadedData)
     var downloadedData: Bool = false
     
 }

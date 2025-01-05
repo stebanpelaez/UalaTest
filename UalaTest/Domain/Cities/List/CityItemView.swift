@@ -14,10 +14,10 @@ struct CityItemView: View {
     var body: some View {
         HStack {
             VStack {
-                Text("\(dataItem.name), \(self.dataItem.country)")
+                Text("\(self.dataItem.name), \(self.dataItem.country)")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.headline)
-                Text("\(dataItem.lat), \(self.dataItem.lon)")
+                Text("\(self.dataItem.lat), \(self.dataItem.lon)")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.caption)
                     .foregroundStyle(Color.gray)
@@ -26,7 +26,8 @@ struct CityItemView: View {
                 /// Modifico el item para que se marque como favorito o no, con SwiftData no requiero hacer ningun otro proceso ya que lo cambia en tiempo real en el modelo almacenado y queda auto guardado
                 self.dataItem.isBookmark.toggle()
             }, label: {
-                Image(systemName: self.dataItem.isBookmark ? "star.fill": "star")
+                let image = self.dataItem.isBookmark ? Constants.Images.startFill: Constants.Images.start
+                Image(systemName: image)
                     .resizable()
                     .frame(width: 24, height: 24)
             })
