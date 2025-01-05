@@ -9,14 +9,14 @@ import Foundation
 /// Mocks para las #Previews y pruebas unitarias
 enum MockHelper {
     
-    static let mock = DataItem(cityId: "", name: "Madrid", country: "ES", lat: 40.489349, lon: -3.68275, isBookmark: false)
+    static let mock = DataItem(prefix: "", name: "Madrid", country: "ES", lat: 40.489349, lon: -3.68275, isBookmark: false)
     
     static let listDataItem = [
-        DataItem(cityId: "id1", name: "City 1", country: "CO", lat: 40.0, lon: 12.0, isBookmark: false),
-        DataItem(cityId: "id2", name: "City 2", country: "CO", lat: 10.0, lon: 12.0, isBookmark: false),
-        DataItem(cityId: "id3", name: "City 3", country: "CO", lat: 10.0, lon: 12.0, isBookmark: true),
-        DataItem(cityId: "id4", name: "City 4", country: "CO", lat: 10.0, lon: 12.0, isBookmark: false),
-        DataItem(cityId: "id5", name: "City 5", country: "CO", lat: 10.0, lon: 12.0, isBookmark: false)
+        DataItem(prefix: "city 1, co", name: "City 1", country: "CO", lat: 40.0, lon: 12.0, isBookmark: false),
+        DataItem(prefix: "city 2, co", name: "City 2", country: "CO", lat: 10.0, lon: 12.0, isBookmark: false),
+        DataItem(prefix: "city 3, co", name: "City 3", country: "CO", lat: 10.0, lon: 12.0, isBookmark: true),
+        DataItem(prefix: "city 4, co", name: "City 4", country: "CO", lat: 10.0, lon: 12.0, isBookmark: false),
+        DataItem(prefix: "city 5, co", name: "City 5", country: "CO", lat: 10.0, lon: 12.0, isBookmark: false)
     ]
     
     static let listLocation = [

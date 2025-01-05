@@ -12,16 +12,15 @@ import SwiftData
 @Model
 final class DataItem {
     
-    @Attribute(.unique) var cityId: String
-    
+    var prefix: String
     var name: String
     var country: String
     var lat: Double
     var lon: Double
     var isBookmark: Bool
     
-    init(cityId: String, name: String, country: String, lat: Double, lon: Double, isBookmark: Bool) {
-        self.cityId = cityId
+    init(prefix: String, name: String, country: String, lat: Double, lon: Double, isBookmark: Bool) {
+        self.prefix = prefix
         self.name = name
         self.country = country
         self.lat = lat
