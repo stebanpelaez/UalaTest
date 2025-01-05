@@ -21,7 +21,7 @@ struct SplashView: View {
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: .blue))
                 .scaleEffect(2.0, anchor: .center)
-            Text("Downloading cities...")
+            Text(Constants.Messages.downloading)
                 .font(.title)
         }
         .task {

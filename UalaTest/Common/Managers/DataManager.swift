@@ -43,8 +43,13 @@ class DataManager: DataManagerProtocol {
             SortDescriptor(\.name, order: .forward),
             SortDescriptor(\.country, order: .forward)
         ])
-        request.fetchLimit = 500 /// Se establece en máximo 500 registros para respuesta mas rápida y para no sobrecargar las vistas
-                                 /// Esto limita el total de los resultados, pero lo considero una buena practica al realizar busquedas en tiempo real
+        
+        /// Se establece en máximo 500 registros para respuesta mas rápida y para no sobrecargar las vistas para busquedas especificas
+        /// Esto limita el total de los resultados, pero lo considero una buena practica al realizar busquedas en tiempo real
+        
+        let limit = predicate == nil ? 3000 : 500   /// 3000 registros cuando muestre todo el listado
+        
+        request.fetchLimit = limit
         return request
     }
     

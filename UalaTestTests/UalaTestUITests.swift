@@ -22,7 +22,7 @@ final class UalaTestUITests: XCTestCase {
         let sut = SplashView(viewModel: SplashViewModel(apiManager: MockApiManager.shared, dataManager: MockDataManager.shared))
         
         let value = try sut.inspect().implicitAnyView().vStack().text(1).string()
-        XCTAssertEqual(value, "Downloading cities...")
+        XCTAssertEqual(value, Constants.Messages.downloading)
     }
     
     func testContentView() throws {
@@ -33,7 +33,7 @@ final class UalaTestUITests: XCTestCase {
         
         let sutSplash = try sut.inspect().find(SplashView.self).actualView()
         let valueSplash = try sutSplash.inspect().implicitAnyView().vStack().text(1).string()
-        XCTAssertEqual(valueSplash, "Downloading cities...")
+        XCTAssertEqual(valueSplash, Constants.Messages.downloading)
         
         PreferencesManager.shared.downloadedData = true
         
@@ -45,13 +45,13 @@ final class UalaTestUITests: XCTestCase {
     func testLandCitiesView() throws {
         let sut = LandCitiesView()
         let value = try sut.inspect().implicitAnyView().hStack().accessibilityIdentifier()
-        XCTAssertEqual(value, "landscapeCities")
+        XCTAssertEqual(value, Constants.Identifiers.landscapeCities)
     }
     
     func testSearchBar() throws {
         let search = Binding<String>(wrappedValue: "Hola")
     
-        let sut = SearchBar(placeHolder: "Placeholder", searchText: search)
+        let sut = SearchBar(placeHolder: Constants.Messages.placeholder, searchText: search)
         try sut.inspect().implicitAnyView().hStack().image(2).callOnTapGesture()
         
         XCTAssertTrue(search.wrappedValue.isEmpty)
@@ -68,7 +68,7 @@ final class UalaTestUITests: XCTestCase {
         let exp = sut.inspection.inspect { view in
             let button = try view.implicitAnyView().vStack().hStack(0).button(1)
             try button.tap()
-            XCTAssertEqual(try button.accessibilityIdentifier(), "favourites")
+            XCTAssertEqual(try button.accessibilityIdentifier(), Constants.Identifiers.favourites)
         }
         
         ViewHosting.host(view: sut.environment(viewModel))
@@ -86,7 +86,7 @@ final class UalaTestUITests: XCTestCase {
         
         let exp = sut.inspection.inspect { view in
             let value = try view.implicitAnyView().map().accessibilityIdentifier()
-            XCTAssertEqual(value, "mapDetail")
+            XCTAssertEqual(value, Constants.Identifiers.mapDetail)
         }
                 
         ViewHosting.host(view: sut.environment(viewModel))

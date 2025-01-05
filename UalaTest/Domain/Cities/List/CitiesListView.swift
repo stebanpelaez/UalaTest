@@ -15,31 +15,32 @@ struct CitiesListView: View {
     @State private var showFavourites = false
     
     internal let inspection = Inspection<Self>()
-
+    
     var body: some View {
         VStack {
             HStack {
-                SearchBar(placeHolder: "Filter", searchText: $textObserver.searchText)
+                SearchBar(placeHolder: Constants.Messages.placeholder, searchText: $textObserver.searchText)
                     .padding(8)
                 Button(action: {
                     self.showFavourites.toggle() /// Me muestra u oculta los favoritos
                     self.checkFetch()
                 }) {
-                    Image(systemName: self.showFavourites ? "star.fill": "star")
+                    let image = self.showFavourites ? Constants.Images.startFill: Constants.Images.start
+                    Image(systemName: image)
                         .resizable()
                         .frame(width: 24, height: 24)
                         .padding(.trailing)
                 }
-                .accessibilityIdentifier("favourites")
+                .accessibilityIdentifier(Constants.Identifiers.favourites)
             }
             
             let items = self.viewModel.items
             
             if items.isEmpty {
                 if self.showFavourites {
-                    self.emptyListView("No favourites")
+                    self.emptyListView(Constants.Messages.notFovourites)
                 } else if !self.textObserver.searchText.isEmpty {
-                    self.emptyListView("No matches found")
+                    self.emptyListView(Constants.Messages.notMatches)
                 }
             }
             
