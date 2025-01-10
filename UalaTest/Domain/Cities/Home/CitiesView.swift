@@ -8,31 +8,29 @@
 import SwiftUI
 
 struct CitiesView: View {
-    
-    /// Esta variable se usa para saber en que orientacion  se encuentra el dispositivo
-    /// El onReceive se activa cuando hay un cambio de orientacion del dispositivo para ajustar la vista
-    @State var isPortrait: Bool = UIDevice.current.orientation.isPortrait
-    
-    @State private var viewModel : CitiesViewModel
-    
+
+    /// Se modifica a geometry reader para saber mejor la orientacion del dispositivo
+    @State private var viewModel: CitiesViewModel
+
     init(viewModel: CitiesViewModel? = nil) {
-        self._viewModel = State(initialValue: viewModel ?? CitiesViewModel(dataManager: DataManager.shared))
+        self._viewModel = State(
+            initialValue: viewModel
+                ?? CitiesViewModel(dataManager: DataManager.shared))
     }
     
     var body: some View {
-        Group {
-            if self.isPortrait {
-                PortCitiesView()
-            } else {
-                LandCitiesView()
+        GeometryReader { geometry in
+            Group {
+                if geometry.size.height > geometry.size.width {
+                    PortCitiesView()
+                } else {
+                    LandCitiesView()
+                }
             }
-        }
-        .environment(self.viewModel)
-        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-            self.isPortrait = UIDevice.current.orientation.isPortrait
+            .environment(self.viewModel)
         }
     }
-    
+
 }
 
 #Preview {
